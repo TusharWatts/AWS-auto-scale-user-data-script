@@ -1,0 +1,16 @@
+#!/bin/bash
+#Setup log file, so that terminal logs are setuo at the following directory
+exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+cd /home/ubuntu/
+#Whenever you get a new instance, you need to update it
+sudo apt update -y
+sudo apt install nodejs -y
+sudo apt install npm -y
+mkdir -p /home/ubuntu/.ssh
+#Add github.com as a know host
+ssh-keyscan -t rsa github.com > /home/ubuntu/.ssh/known_hosts
+git clone https://github.com/TusharWatts/Flights-Service.git
+cd API_Gateway
+sudo npm install
+# start the app
+sudo npx pm2 start index.js 
